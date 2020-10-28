@@ -81,6 +81,7 @@ def tr_completely_shuffle(x: list, *true_randbits_tuple: Callable[[int], int], u
     assert isinstance(x, list), f'x must be an list, got type {type(x).__name__}'
     for true_randbits in true_randbits_tuple:
         assert isinstance(true_randbits, Callable), f'true_randbits must be an Callable, got type {type(true_randbits).__name__}'
+    assert isinstance(unbias, bool), f'unbias must be an bool, got type {type(unbias).__name__}'
     
     from functools import partial
     
@@ -120,6 +121,7 @@ def pr_completely_shuffle(x: list, seed: Optional[int] = None, prng_type: str = 
     '''
     assert isinstance(x, list), f'x must be an list, got type {type(x).__name__}'
     assert isinstance(seed, (int, type(None))), f'seed must be an int or None, got type {type(seed).__name__}'
+    assert isinstance(prng_type, str), f'prng_type must be an str, got type {type(prng_type).__name__}'
     if isinstance(seed, int) and (seed < 0): raise ValueError('seed must be >= 0')
     if prng_type not in prng_algorithms_tuple: raise ValueError('The string for prng_type is not in the list of implemented algorithms.')
     
