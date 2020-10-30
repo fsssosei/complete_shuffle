@@ -18,4 +18,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from complete_shuffle_package.complete_shuffle_module import *
 
-version = '0.9.4'
+version = '0.9.5'
