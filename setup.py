@@ -1,5 +1,5 @@
 '''
-completely_shuffle - This package is used to completely shuffle the list.
+complete_shuffle - This package is used to complete shuffle the list.
 Copyright (C) 2020  sosei
 
 This program is free software: you can redistribute it and/or modify
@@ -22,16 +22,16 @@ with open("README.md", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(
-    name='completely_shuffle',
-    version='0.9.2',
+    name='complete_shuffle',
+    version='0.9.3',
     description='Complete shuffling of lists with true random or pseudo random sequences.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/fsssosei/completely_shuffle',
+    url='https://github.com/fsssosei/complete_shuffle',
     license='GNU Affero General Public License v3',
     author='sosei',
     author_email='fss.sosei@gmail.com',
-    keywords=['shuffle', 'completely', 'Random'],
+    keywords=['shuffle', 'complete', 'Random'],
     python_requires='>=3.8',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
