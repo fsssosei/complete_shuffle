@@ -91,7 +91,7 @@ def tr_complete_shuffle(x: list, *true_randbits_tuple: Callable[[int], int], unb
     _shuffle(x, randint)
 
 
-def _dynamic_docstring(func):
+def _dynamic_docstring_of_pr_complete_shuffle(func):
     func.__doc__ = func.__doc__.replace('default_prng_type', default_prng_type)
     func.__doc__ = func.__doc__.replace('prng_algorithms_tuple', ', '.join([item for item in prng_algorithms_tuple]))
     @wraps(func)
@@ -100,7 +100,7 @@ def _dynamic_docstring(func):
     return wrapper
 
 
-@_dynamic_docstring
+@_dynamic_docstring_of_pr_complete_shuffle
 def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = default_prng_type) -> None:
     '''
         Complete shuffle the list based on pseudo-random Numbers.
