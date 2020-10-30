@@ -14,6 +14,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
 from typing import Final, Callable, Optional
+from functools import wraps
 from pure_nrng_package import *
 from pure_prng_package import pure_prng
 
@@ -90,6 +91,16 @@ def tr_complete_shuffle(x: list, *true_randbits_tuple: Callable[[int], int], unb
     _shuffle(x, randint)
 
 
+def _dynamic_docstring(func):
+    func.__doc__ = func.__doc__.replace('default_prng_type', default_prng_type)
+    func.__doc__ = func.__doc__.replace('prng_algorithms_tuple', ', '.join([item for item in prng_algorithms_tuple]))
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+
+@_dynamic_docstring
 def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = default_prng_type) -> None:
     '''
         Complete shuffle the list based on pseudo-random Numbers.
@@ -105,6 +116,7 @@ def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = de
         
         prng_type: str, default default_prng_type
             Specifies the pseudo-random number generator algorithm to use. 指定所用的伪随机数生成器算法。
+            Available algorithms: prng_algorithms_tuple
         
         Returns
         -------
