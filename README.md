@@ -16,6 +16,8 @@
 
 Multiple external true random sources can be accessed to shuffle the list.
 
+In addition to the shuffle function, there are also random cyclic permutation functions.
+
 ## Installation
 
 Installation can be done through pip. You must have python version >= 3.8
@@ -35,3 +37,8 @@ Example:
 	>>> pr_complete_shuffle(sequence_list, seed)
 	>>> sequence_list
 	[3, 6, 2, 10, 11, 0, 7, 9, 1, 4, 8, 5]
+	
+	>>> sequence_list = list(range(12))
+	>>> pr_complete_cyclic_permutation(sequence_list, seed)
+	>>> sequence_list
+	[2, 3, 7, 11, 6, 9, 0, 10, 1, 4, 8, 5]
