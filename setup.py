@@ -23,7 +23,7 @@ with open("README.md", encoding='utf-8') as fh:
 
 setup(
     name='complete_shuffle',
-    version='0.9.6',
+    version='0.9.8',
     description='Complete shuffling of lists with true random or pseudo random sequences.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -31,7 +31,7 @@ setup(
     license='GNU Affero General Public License v3',
     author='sosei',
     author_email='fss.sosei@gmail.com',
-    keywords=['complete', 'shuffle', 'cyclic permutation', 'random'],
+    keywords=['complete', 'shuffle', 'cyclic permutation', 'derangement', 'random'],
     python_requires='>=3.8',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
