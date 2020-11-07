@@ -13,7 +13,7 @@
 
 Multiple external true random sources can be accessed to shuffle the list.
 
-In addition to the shuffle function, there are also random cyclic permutation functions.
+In addition to the shuffle function, there are also random cyclic permutation functions, and the derangement function.
 
 ## Installation
 
@@ -39,3 +39,8 @@ Example:
 	>>> pr_complete_cyclic_permutation(sequence_list, seed)
 	>>> sequence_list
 	[2, 3, 7, 11, 6, 9, 0, 10, 1, 4, 8, 5]
+	
+	>>> sequence_list = list(range(12))
+	>>> pr_complete_derangement(sequence_list, seed)
+	>>> sequence_list
+	[3, 2, 8, 11, 10, 0, 1, 4, 6, 5, 7, 9]
