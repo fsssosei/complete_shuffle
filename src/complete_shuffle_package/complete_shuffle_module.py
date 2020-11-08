@@ -15,6 +15,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Final, Callable, Union, Tuple, Optional
 from collections.abc import Sized
+from collections import namedtuple
+from math import pi, e, ceil, log2
+from functools import partial
 from pure_nrng_package import *
 from pure_prng_package import pure_prng
 
@@ -55,8 +58,6 @@ def _random_derangement(x: list, randint: Callable[[int, int], int]) -> None:
          
         The formal parameter randint requires a callable object such as rand_int(b, a) that generates a random integer within the specified closed interval.
     '''
-    from collections import namedtuple
-    
     sequence_type = namedtuple('sequence_type', ('sequence_number', 'elem'))
     
     x_length = len(x)
@@ -96,14 +97,12 @@ def _calculate_number_of_shuffles_required(item_number: int, period: int) -> int
     '''
     if period < 2: raise ValueError('period must be >= 2')
     
-    import math
-    
     if item_number >= 1:
         if item_number in (1, 2):
             bit_length_of_permutation_number = {1: 1, 2: 2}[item_number]
         else:
-            bit_length_of_permutation_number = math.ceil(math.log2(2 * math.pi * item_number) / 2 + math.log2(item_number / math.e) * item_number)
-        shuffle_number = math.ceil(bit_length_of_permutation_number / (period.bit_length() - 1))
+            bit_length_of_permutation_number = ceil(log2(2 * pi * item_number) / 2 + log2(item_number / e) * item_number)
+        shuffle_number = ceil(bit_length_of_permutation_number / (period.bit_length() - 1))
     else:
         shuffle_number = 0
     return shuffle_number
@@ -141,8 +140,6 @@ def tr_complete_shuffle(x: list, *true_randbits_args: Union[True_Randbits, Tuple
             assert isinstance(unbias, bool), f'Unbias must be an bool, got type {type(unbias).__name__}'
         else:
             assert isinstance(item, Callable), f'True_Randbits must be an Callable, got type {type(item).__name__}'
-    
-    from functools import partial
     
     nrng_instance = pure_nrng(*true_randbits_args)
     randint = partial(nrng_instance.true_rand_int)
@@ -195,9 +192,11 @@ def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = de
     
     current_period = prng_period
     prng_instance = pure_prng(seed, prng_type)
+    rng_util_prev_prime = rng_util.prev_prime
+    prng_instance_rand_int = prng_instance.rand_int
     for _ in range(shuffle_number):
-        current_period = int(rng_util.prev_prime(current_period))
-        _shuffle(x, prng_instance.rand_int)
+        current_period = int(rng_util_prev_prime(current_period))
+        _shuffle(x, prng_instance_rand_int)
 _dynamic_docstring_of_pr_complete_shuffle()
 
 
@@ -233,8 +232,6 @@ def tr_complete_cyclic_permutation(x: list, *true_randbits_args: Union[True_Rand
             assert isinstance(unbias, bool), f'Unbias must be an bool, got type {type(unbias).__name__}'
         else:
             assert isinstance(item, Callable), f'True_Randbits must be an Callable, got type {type(item).__name__}'
-    
-    from functools import partial
     
     nrng_instance = pure_nrng(*true_randbits_args)
     randint = partial(nrng_instance.true_rand_int)
@@ -287,9 +284,11 @@ def pr_complete_cyclic_permutation(x: list, seed: Optional[int] = None, prng_typ
     
     current_period = prng_period
     prng_instance = pure_prng(seed, prng_type)
+    rng_util_prev_prime = rng_util.prev_prime
+    prng_instance_rand_int = prng_instance.rand_int
     for _ in range(shuffle_number):
-        current_period = int(rng_util.prev_prime(current_period))
-        _random_cyclic_permutation(x, prng_instance.rand_int)
+        current_period = int(rng_util_prev_prime(current_period))
+        _random_cyclic_permutation(x, prng_instance_rand_int)
 _dynamic_docstring_of_pr_complete_cyclic_permutation()
 
 
@@ -329,8 +328,6 @@ def tr_complete_derangement(x: list, *true_randbits_args: Union[True_Randbits, T
             assert isinstance(unbias, bool), f'Unbias must be an bool, got type {type(unbias).__name__}'
         else:
             assert isinstance(item, Callable), f'True_Randbits must be an Callable, got type {type(item).__name__}'
-    
-    from functools import partial
     
     nrng_instance = pure_nrng(*true_randbits_args)
     randint = partial(nrng_instance.true_rand_int)
@@ -387,7 +384,9 @@ def pr_complete_derangement(x: list, seed: Optional[int] = None, prng_type: str 
     
     current_period = prng_period
     prng_instance = pure_prng(seed, prng_type)
+    rng_util_prev_prime = rng_util.prev_prime
+    prng_instance_rand_int = prng_instance.rand_int
     for _ in range(shuffle_number):
-        current_period = int(rng_util.prev_prime(current_period))
-        _random_derangement(x, prng_instance.rand_int)
+        current_period = int(rng_util_prev_prime(current_period))
+        _random_derangement(x, prng_instance_rand_int)
 _dynamic_docstring_of_pr_complete_derangement()
