@@ -23,7 +23,7 @@ with open("README.md", encoding='utf-8') as fh:
 
 setup(
     name='complete_shuffle',
-    version='0.9.8',
+    version='0.9.9',
     description='Complete shuffling of lists with true random or pseudo random sequences.',
     long_description=long_description,
     long_description_content_type='text/markdown',
