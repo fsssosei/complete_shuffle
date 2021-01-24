@@ -29,18 +29,23 @@ The statement to import the package:
 	
 Example:
 
-	>>> seed = 170141183460469231731687303715884105727
+	>>> calculate_number_of_shuffles_required(12, 'seed_size')
+	58
+	
+	#The entropy of the seed must not be less than the number of permutations in the list.(Calculate with "calculate_number_of_shuffles_required" function)
+	>>> seed = 170141183460469231731687303715884105727 & ((1 << 58) - 1)
+	
 	>>> sequence_list = list(range(12))
 	>>> pr_complete_shuffle(sequence_list, seed)
 	>>> sequence_list
-	[3, 6, 2, 10, 11, 0, 7, 9, 1, 4, 8, 5]
+	[6, 0, 9, 11, 2, 1, 7, 5, 3, 10, 4, 8]
 	
 	>>> sequence_list = list(range(12))
 	>>> pr_complete_cyclic_permutation(sequence_list, seed)
 	>>> sequence_list
-	[2, 3, 7, 11, 6, 9, 0, 10, 1, 4, 8, 5]
+	[6, 11, 0, 9, 2, 1, 7, 5, 3, 10, 4, 8]
 	
 	>>> sequence_list = list(range(12))
 	>>> pr_complete_derangement(sequence_list, seed)
 	>>> sequence_list
-	[3, 2, 8, 11, 10, 0, 1, 4, 6, 5, 7, 9]
+	[6, 0, 9, 11, 2, 1, 7, 5, 3, 10, 4, 8]
