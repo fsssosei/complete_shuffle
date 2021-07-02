@@ -1,6 +1,6 @@
 '''
 complete_shuffle - This package is used to complete shuffle the list.
-Copyright (C) 2020  sosei
+Copyright (C) 2020-2021  sosei
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
@@ -18,4 +18,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from complete_shuffle_package.complete_shuffle_module import *
 
-version = '1.0.0'
+version = '1.1.0'
