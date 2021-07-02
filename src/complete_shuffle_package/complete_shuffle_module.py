@@ -1,6 +1,6 @@
 '''
 complete_shuffle - This package is used to complete shuffle the list. 这个包用于对列表完全洗牌。
-Copyright (C) 2020  sosei
+Copyright (C) 2020-2021  sosei
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
 by the Free Software Foundation, either version 3 of the License, or
@@ -91,8 +91,8 @@ def calculate_number_of_shuffles_required(item_number: int, formula_type: str, p
             The number of items to shuffle the list.  要洗牌列表的项数。
             item_number must be >= 1
         
-        formula_type: str['seed_size' | 'shuffle_number']
-            Set the computed result to be output according to hash size or pseudo-random period.
+        formula_type: str['prng_period' | 'shuffle_number']
+            Set the computed result to be output according to pseudo-random period or shuffle number.
         
         period: int, default None
             Eigenperiod of a random number generator (maximum period)  随机数生成器的本征周期（最大周期）
@@ -100,8 +100,8 @@ def calculate_number_of_shuffles_required(item_number: int, formula_type: str, p
         
         Examples
         --------
-        >>> calculate_number_of_shuffles_required(12, 'seed_size')
-        58
+        >>> calculate_number_of_shuffles_required(12, 'prng_period')
+        288230376151711744
         >>> calculate_number_of_shuffles_required(1000, 'shuffle_number', 2 ** 256)
         67
     '''
@@ -110,9 +110,9 @@ def calculate_number_of_shuffles_required(item_number: int, formula_type: str, p
     else:
         bit_length_of_permutation_number = ceil(log2(2 * pi * item_number) / 2 + log2(item_number / e) * item_number)
     
-    if formula_type == 'seed_size':
-        seed_size = bit_length_of_permutation_number << 1  #Any PRNG should have a period longer than the square of the number of outputs required.
-        return seed_size
+    if formula_type == 'prng_period':
+        prng_period = 1 << (bit_length_of_permutation_number << 1)  #Any PRNG should have a period longer than the square of the number of outputs required.
+        return prng_period
     elif formula_type == 'shuffle_number':
         shuffle_number = int(gmpy2_c_div(bit_length_of_permutation_number, (period - 1).bit_length() // 2))
         return shuffle_number
@@ -182,11 +182,11 @@ def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = de
         Examples
         --------
         >>> sequence_list = list(range(12))
-        >>> seed_size = calculate_number_of_shuffles_required(12, 'seed_size')
-        >>> seed = 170141183460469231731687303715884105727 & ((1 << seed_size) - 1)
+        >>> prng_period = calculate_number_of_shuffles_required(12, 'prng_period')
+        >>> seed = 170141183460469231731687303715884105727 & prng_period.bit_length()
         >>> pr_complete_shuffle(sequence_list, seed)
         >>> sequence_list
-        [6, 0, 9, 11, 2, 1, 7, 5, 3, 10, 4, 8]
+        [11, 5, 7, 3, 0, 4, 6, 9, 10, 1, 2, 8]
     '''
     assert isinstance(x, list), f'x must be an list, got type {type(x).__name__}'
     
@@ -194,9 +194,9 @@ def pr_complete_shuffle(x: list, seed: Optional[int] = None, prng_type: str = de
     if list_len > 1:
         algorithm_characteristics_parameter = pure_prng.prng_algorithms_dict[prng_type]
         
-        if algorithm_characteristics_parameter['modify_period']:
-            new_hash_size = calculate_number_of_shuffles_required(list_len, 'seed_size')
-            prng_instance = pure_prng(seed, prng_type, new_hash_size, additional_hash)
+        if algorithm_characteristics_parameter['variable_period']:
+            new_prng_period = calculate_number_of_shuffles_required(list_len, 'prng_period')
+            prng_instance = pure_prng(seed, prng_type, new_prng_period, additional_hash)
             prng_instance_rand_int = prng_instance.rand_int
             _shuffle(x, prng_instance_rand_int)
         else:
@@ -287,11 +287,11 @@ def pr_complete_cyclic_permutation(x: list, seed: Optional[int] = None, prng_typ
         Examples
         --------
         >>> sequence_list = list(range(12))
-        >>> seed_size = calculate_number_of_shuffles_required(12, 'seed_size')
-        >>> seed = 170141183460469231731687303715884105727 & ((1 << seed_size) - 1)
+        >>> prng_period = calculate_number_of_shuffles_required(12, 'prng_period')
+        >>> seed = 170141183460469231731687303715884105727 & prng_period.bit_length()
         >>> pr_complete_cyclic_permutation(sequence_list, seed)
         >>> sequence_list
-        [6, 11, 0, 9, 2, 1, 7, 5, 3, 10, 4, 8]
+        [6, 11, 5, 7, 3, 0, 4, 9, 10, 1, 2, 8]
     '''
     assert isinstance(x, list), f'x must be an list, got type {type(x).__name__}'
     
@@ -299,9 +299,9 @@ def pr_complete_cyclic_permutation(x: list, seed: Optional[int] = None, prng_typ
     if list_len > 1:
         algorithm_characteristics_parameter = pure_prng.prng_algorithms_dict[prng_type]
         
-        if algorithm_characteristics_parameter['modify_period']:
-            new_hash_size = calculate_number_of_shuffles_required(list_len, 'seed_size')
-            prng_instance = pure_prng(seed, prng_type, new_hash_size, additional_hash)
+        if algorithm_characteristics_parameter['variable_period']:
+            new_prng_period = calculate_number_of_shuffles_required(list_len, 'prng_period')
+            prng_instance = pure_prng(seed, prng_type, new_prng_period, additional_hash)
             prng_instance_rand_int = prng_instance.rand_int
             _random_cyclic_permutation(x, prng_instance_rand_int)
         else:
@@ -400,11 +400,11 @@ def pr_complete_derangement(x: list, seed: Optional[int] = None, prng_type: str 
         Examples
         --------
         >>> sequence_list = list(range(12))
-        >>> seed_size = calculate_number_of_shuffles_required(12, 'seed_size')
-        >>> seed = 170141183460469231731687303715884105727 & ((1 << seed_size) - 1)
+        >>> prng_period = calculate_number_of_shuffles_required(12, 'prng_period')
+        >>> seed = 170141183460469231731687303715884105727 & prng_period.bit_length()
         >>> pr_complete_derangement(sequence_list, seed)
         >>> sequence_list
-        [6, 0, 9, 11, 2, 1, 7, 5, 3, 10, 4, 8]
+        [7, 3, 11, 2, 0, 10, 5, 4, 6, 1, 9, 8]
     '''
     assert isinstance(x, list), f'x must be an list, got type {type(x).__name__}'
     
@@ -412,9 +412,9 @@ def pr_complete_derangement(x: list, seed: Optional[int] = None, prng_type: str 
     if list_len > 1:
         algorithm_characteristics_parameter = pure_prng.prng_algorithms_dict[prng_type]
         
-        if algorithm_characteristics_parameter['modify_period']:
-            new_hash_size = calculate_number_of_shuffles_required(list_len, 'seed_size')
-            prng_instance = pure_prng(seed, prng_type, new_hash_size, additional_hash)
+        if algorithm_characteristics_parameter['variable_period']:
+            new_prng_period = calculate_number_of_shuffles_required(list_len, 'prng_period')
+            prng_instance = pure_prng(seed, prng_type, new_prng_period, additional_hash)
             prng_instance_rand_int = prng_instance.rand_int
             _random_derangement(x, prng_instance_rand_int)
         else:
