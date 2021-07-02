@@ -1,6 +1,6 @@
 '''
 complete_shuffle - This package is used to complete shuffle the list.
-Copyright (C) 2020  sosei
+Copyright (C) 2020-2021  sosei
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
@@ -23,7 +23,7 @@ with open("README.md", encoding='utf-8') as fh:
 
 setup(
     name='complete_shuffle',
-    version='1.0.0',
+    version='1.1.0',
     description='Complete shuffling of lists with true random or pseudo random sequences.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -41,5 +41,5 @@ setup(
     package_dir={'': 'src'},
     packages=find_packages('src'),
     include_package_data=True,
-    install_requires=['gmpy2>=2.0.8', 'pure-nrng>=1.0.0', 'pure-prng>=1.0.0']
+    install_requires=['gmpy2>=2.0.8', 'pure-nrng>=1.1.0', 'pure-prng>=2.0.0']
 )
